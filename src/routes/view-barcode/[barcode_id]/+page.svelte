@@ -29,7 +29,7 @@
 
 	<div slot="content">
 		{#if barcode}
-			<div class="max-w-screen-sm rounded-md border border-gray-300 shadow">
+			<div class="rounded-md border border-gray-300 shadow">
 				<div
 					class="flex flex-row items-center justify-between gap-2 border-b border-gray-300 p-4"
 					style="background-color: {barcode.bgColor}; color: {barcode.textColor}"
