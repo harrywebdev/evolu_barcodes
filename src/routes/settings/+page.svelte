@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Anchor, Button, TopNav } from '$lib';
+	import { Anchor, Button, TopNav, LayoutPage } from '$lib';
 	import { Mnemonic } from '@evolu/common';
 	import { evolu } from '../../app/evolu';
 
@@ -79,30 +79,37 @@
 	}
 </script>
 
-<TopNav title="bodiky:settings">
-	<Anchor slot="action" href="/">← home</Anchor>
-</TopNav>
+<LayoutPage>
+	<TopNav slot="nav" title="bodiky:settings">
+		<Anchor slot="action" href="/">← home</Anchor>
+	</TopNav>
 
-<hr class="my-6 border-gray-400" />
+	<div slot="content">
+		<div class="grid grid-cols-2 gap-4">
+			<Button variant="secondary" on:click={handleShowMnemonicOnClick}>Show mnemonic</Button>
+			<Button variant="secondary" on:click={handleRestoreAppOwnerOnClick}>Restore Owner</Button>
+			<Button variant="secondary" on:click={handleResetAppOwnerOnClick}>Reset Owner</Button>
+			<Button variant="secondary" on:click={handleDownloadDatabaseOnClick}>Download Database</Button
+			>
+		</div>
 
-<div class="grid grid-cols-2 gap-4">
-	<Button variant="secondary" on:click={handleShowMnemonicOnClick}>Show mnemonic</Button>
-	<Button variant="secondary" on:click={handleRestoreAppOwnerOnClick}>Restore Owner</Button>
-	<Button variant="secondary" on:click={handleResetAppOwnerOnClick}>Reset Owner</Button>
-	<Button variant="secondary" on:click={handleDownloadDatabaseOnClick}>Download Database</Button>
-</div>
+		<dialog
+			bind:this={dialogEl}
+			class="top-1/2 left-1/2 w-96 max-w-full -translate-x-1/2 -translate-y-1/2 rounded-lg border border-gray-300 p-6 text-center shadow-xl backdrop:bg-black/50"
+		>
+			<h2 class="mb-4 text-xl font-semibold">{dialogTitle}</h2>
+			<p class="mb-6 text-gray-600">{dialogContent}</p>
 
-<dialog
-	bind:this={dialogEl}
-	class="top-1/2 left-1/2 w-96 max-w-full -translate-x-1/2 -translate-y-1/2 rounded-lg border border-gray-300 p-6 text-center shadow-xl backdrop:bg-black/50"
->
-	<h2 class="mb-4 text-xl font-semibold">{dialogTitle}</h2>
-	<p class="mb-6 text-gray-600">{dialogContent}</p>
-
-	<div class="flex items-center justify-center gap-4">
-		<Button variant="primary" on:click={closeDialog}>Close</Button>
-		<Button variant="secondary" on:click={copyMnemonicToClipboard} disabled={hasCopiedToClipboard}>
-			{hasCopiedToClipboard ? '✓ Copied' : 'Copy'}
-		</Button>
+			<div class="flex items-center justify-center gap-4">
+				<Button variant="primary" on:click={closeDialog}>Close</Button>
+				<Button
+					variant="secondary"
+					on:click={copyMnemonicToClipboard}
+					disabled={hasCopiedToClipboard}
+				>
+					{hasCopiedToClipboard ? '✓ Copied' : 'Copy'}
+				</Button>
+			</div>
+		</dialog>
 	</div>
-</dialog>
+</LayoutPage>

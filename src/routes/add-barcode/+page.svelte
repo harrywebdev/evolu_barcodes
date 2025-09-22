@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { Anchor, TopNav, BarcodeForm } from '$lib';
+	import { Anchor, TopNav, BarcodeForm, LayoutPage } from '$lib';
 	import { CreateBarcodeSchema } from '../../app/barcode.model';
 	import { createBarcode } from '../../app/barcode.data';
 
@@ -46,21 +46,21 @@
 	}
 </script>
 
-<TopNav title="bodiky:add-barcode">
-	<Anchor slot="action" href="/">← home</Anchor>
-</TopNav>
+<LayoutPage>
+	<TopNav slot="nav" title="bodiky:add-barcode">
+		<Anchor slot="action" href="/">← home</Anchor>
+	</TopNav>
 
-<hr class="my-6 border-gray-400" />
-
-<div class="max-w-screen-sm">
-	<BarcodeForm
-		bind:title
-		bind:code
-		bind:format
-		bind:bgColor
-		bind:textColor
-		bind:logoUrl
-		onSubmit={handleSubmit}
-		buttonLabel="save barcode"
-	/>
-</div>
+	<div slot="content">
+		<BarcodeForm
+			bind:title
+			bind:code
+			bind:format
+			bind:bgColor
+			bind:textColor
+			bind:logoUrl
+			onSubmit={handleSubmit}
+			buttonLabel="save barcode"
+		/>
+	</div>
+</LayoutPage>

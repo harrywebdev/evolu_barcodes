@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Anchor, TopNav } from '$lib';
+	import { Anchor, TopNav, LayoutPage } from '$lib';
 	import { queryState } from '@evolu/svelte';
 	import { page } from '$app/state';
 	import { evolu } from '../../../app/evolu';
@@ -22,34 +22,36 @@
 	const barcode = $derived(barcodeState.rows?.[0]);
 </script>
 
-<TopNav title="bodiky:view">
-	<Anchor slot="action" href="/">← home</Anchor>
-</TopNav>
+<LayoutPage>
+	<TopNav slot="nav" title="bodiky:view">
+		<Anchor slot="action" href="/">← home</Anchor>
+	</TopNav>
 
-<hr class="my-6 border-gray-400" />
-
-{#if barcode}
-	<div class="max-w-screen-sm rounded-md border border-gray-300 shadow">
-		<div
-			class="flex flex-row items-center justify-between gap-2 border-b border-gray-300 p-4"
-			style="background-color: {barcode.bgColor}; color: {barcode.textColor}"
-		>
-			<h1 class="text-2xl font-bold">{barcode.title}</h1>
-
-			{#if barcode.logoUrl}
+	<div slot="content">
+		{#if barcode}
+			<div class="max-w-screen-sm rounded-md border border-gray-300 shadow">
 				<div
-					class="flex flex-row items-center justify-center rounded-md border border-gray-200 p-2"
+					class="flex flex-row items-center justify-between gap-2 border-b border-gray-300 p-4"
+					style="background-color: {barcode.bgColor}; color: {barcode.textColor}"
 				>
-					<img src={barcode.logoUrl} alt="barcode logo" class="h-14" />
-				</div>
-			{/if}
-		</div>
+					<h1 class="text-2xl font-bold">{barcode.title}</h1>
 
-		<div class="p-4">
-			<p>{barcode.code}</p>
-			<p>{barcode.format}</p>
-		</div>
+					{#if barcode.logoUrl}
+						<div
+							class="flex flex-row items-center justify-center rounded-md border border-gray-200 p-2"
+						>
+							<img src={barcode.logoUrl} alt="barcode logo" class="h-14" />
+						</div>
+					{/if}
+				</div>
+
+				<div class="p-4">
+					<p>{barcode.code}</p>
+					<p>{barcode.format}</p>
+				</div>
+			</div>
+		{:else}
+			<LoadingIndicator />
+		{/if}
 	</div>
-{:else}
-	<LoadingIndicator />
-{/if}
+</LayoutPage>
