@@ -8,6 +8,7 @@
 	import { goto } from '$app/navigation';
 	import { getOrThrow } from '@evolu/common';
 	import { LoadingIndicator } from '$lib';
+	import JsBarcode from 'jsbarcode';
 
 	const barcodeIdParam = BarcodeId.fromUnknown(page.params.barcode_id);
 
@@ -20,6 +21,15 @@
 
 	const barcodeState = queryState(evolu, () => queryBarcodeById(barcodeId));
 	const barcode = $derived(barcodeState.rows?.[0]);
+
+	$effect(() => {
+		if (barcode?.code) {
+			JsBarcode('#barcode', barcode.code, {
+				// TODO: map the existing `BarcodeFormat` to `JsBarcode` format
+				format: barcode.format && barcode.format !== 'unknown' ? barcode.format : 'code128' // default
+			});
+		}
+	});
 </script>
 
 <LayoutPage>
@@ -46,8 +56,11 @@
 				</div>
 
 				<div class="p-4">
-					<p>{barcode.code}</p>
-					<p>{barcode.format}</p>
+					<img id="barcode" class="block h-auto w-full" alt="" />
+
+					<div class="mt-4 text-center text-gray-400">
+						<p>{barcode.code} | {barcode.format}</p>
+					</div>
 				</div>
 			</div>
 		{:else}
