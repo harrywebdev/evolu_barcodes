@@ -42,7 +42,7 @@ export const createBarcode = (
 	format: BarcodeFormat,
 	bgColor: BarcodeBgColor,
 	textColor: BarcodeTextColor,
-	logoUrl?: BarcodeLogoUrl
+	logoUrl: BarcodeLogoUrl
 ) =>
 	insert('barcode', {
 		title,
@@ -50,7 +50,7 @@ export const createBarcode = (
 		format,
 		bgColor,
 		textColor,
-		logoUrl: logoUrl ?? ''
+		logoUrl
 	});
 
 export const deleteBarcode = (id: BarcodeId) => update('barcode', { id, isDeleted: true });

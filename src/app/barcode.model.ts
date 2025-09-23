@@ -8,7 +8,7 @@ import {
 	union,
 	regex,
 	TrimmedString,
-	optional
+	nullOr
 } from '@evolu/common';
 
 export const BarcodeId = id('BarcodeId');
@@ -44,7 +44,7 @@ export type BarcodeBgColor = typeof BarcodeBgColor.Type;
 export const BarcodeTextColor = regex('BarcodeTextColor', /^#[0-9A-Fa-f]{6}$/)(TrimmedString);
 export type BarcodeTextColor = typeof BarcodeTextColor.Type;
 
-export const BarcodeLogoUrl = NonEmptyTrimmedString1000;
+export const BarcodeLogoUrl = nullOr(NonEmptyTrimmedString1000);
 export type BarcodeLogoUrl = typeof BarcodeLogoUrl.Type;
 
 export const CreateBarcodeSchema = object({
@@ -53,7 +53,7 @@ export const CreateBarcodeSchema = object({
 	format: BarcodeFormat,
 	bgColor: BarcodeBgColor,
 	textColor: BarcodeTextColor,
-	logoUrl: optional(BarcodeLogoUrl)
+	logoUrl: BarcodeLogoUrl
 });
 
 export const BarcodeSchema = {
@@ -63,7 +63,7 @@ export const BarcodeSchema = {
 	format: BarcodeFormat,
 	bgColor: BarcodeBgColor,
 	textColor: BarcodeTextColor,
-	logoUrl: optional(BarcodeLogoUrl)
+	logoUrl: BarcodeLogoUrl
 };
 
 export const Barcode = object({
