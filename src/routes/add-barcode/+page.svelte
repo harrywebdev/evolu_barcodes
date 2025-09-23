@@ -47,7 +47,7 @@
 </script>
 
 <LayoutPage>
-	<TopNav slot="nav" title="bodiky:add-barcode">
+	<TopNav slot="nav" title="bodiky:add">
 		<Anchor slot="action" href="/">← home</Anchor>
 	</TopNav>
 

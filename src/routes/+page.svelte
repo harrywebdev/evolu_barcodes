@@ -20,16 +20,14 @@
 				on:click={() => goto(`/view-barcode/${barcode.id}`)}
 			>
 				<span
-					class="flex flex-row items-center justify-between gap-2 p-4"
+					class="flex flex-row items-center justify-between gap-2 rounded-md p-4"
 					style="background-color: {barcode.bgColor}; color: {barcode.textColor}"
 				>
 					<span class="text-2xl font-bold">{barcode.title}</span>
 
 					{#if barcode.logoUrl}
-						<span
-							class="flex flex-row items-center justify-center rounded-md border border-gray-200 p-2"
-						>
-							<img src={barcode.logoUrl} alt="barcode logo" class="h-14" />
+						<span class="flex flex-row items-center justify-center">
+							<img src={barcode.logoUrl} alt="barcode logo" class="h-14 rounded-md" />
 						</span>
 					{/if}
 				</span>

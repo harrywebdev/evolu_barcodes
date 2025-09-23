@@ -41,16 +41,14 @@
 		{#if barcode}
 			<div class="rounded-md border border-gray-300 shadow">
 				<div
-					class="flex flex-row items-center justify-between gap-2 border-b border-gray-300 p-4"
+					class="flex flex-row items-center justify-between gap-2 rounded-t-md border-b border-gray-300 p-4"
 					style="background-color: {barcode.bgColor}; color: {barcode.textColor}"
 				>
 					<h1 class="text-2xl font-bold">{barcode.title}</h1>
 
 					{#if barcode.logoUrl}
-						<div
-							class="flex flex-row items-center justify-center rounded-md border border-gray-200 p-2"
-						>
-							<img src={barcode.logoUrl} alt="barcode logo" class="h-14" />
+						<div class="flex flex-row items-center justify-center">
+							<img src={barcode.logoUrl} alt="barcode logo" class="h-14 rounded-md" />
 						</div>
 					{/if}
 				</div>
@@ -60,6 +58,9 @@
 
 					<div class="mt-4 text-center text-gray-400">
 						<p>{barcode.code} | {barcode.format}</p>
+						<p>
+							<Anchor href="/edit-barcode/{barcode.id}">&plusmn; edit</Anchor>
+						</p>
 					</div>
 				</div>
 			</div>

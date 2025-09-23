@@ -53,6 +53,16 @@ export const createBarcode = (
 		logoUrl
 	});
 
+export const updateBarcode = (
+	id: BarcodeId,
+	title: BarcodeTitle,
+	code: BarcodeCode,
+	format: BarcodeFormat,
+	bgColor: BarcodeBgColor,
+	textColor: BarcodeTextColor,
+	logoUrl: BarcodeLogoUrl
+) => update('barcode', { id, title, code, format, bgColor, textColor, logoUrl });
+
 export const deleteBarcode = (id: BarcodeId) => update('barcode', { id, isDeleted: true });
 
 const { insert, update } = evolu;

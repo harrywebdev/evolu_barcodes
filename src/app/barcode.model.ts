@@ -66,6 +66,8 @@ export const BarcodeSchema = {
 	logoUrl: BarcodeLogoUrl
 };
 
+export const UpdateBarcodeSchema = object(BarcodeSchema);
+
 export const Barcode = object({
 	...BarcodeSchema,
 	createdAt: DateIso,
