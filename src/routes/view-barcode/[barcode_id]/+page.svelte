@@ -3,7 +3,7 @@
 	import { queryState } from '@evolu/svelte';
 	import { page } from '$app/state';
 	import { evolu } from '../../../app/evolu';
-	import { queryBarcodeById, updateBarcodeFormat } from '../../../app/barcode.data';
+	import { deleteBarcode, queryBarcodeById, updateBarcodeFormat } from '../../../app/barcode.data';
 	import { BarcodeFormatMap, BarcodeId, BarcodeFormat, Barcode } from '../../../app/barcode.model';
 	import { goto } from '$app/navigation';
 	import { getOrThrow } from '@evolu/common';
@@ -93,6 +93,14 @@
 			}
 		}
 	}
+
+	function handleDelete(barcodeId: BarcodeId) {
+		if (confirm('Are you sure you want to delete this barcode?')) {
+			deleteBarcode(barcodeId);
+
+			goto('/');
+		}
+	}
 </script>
 
 <LayoutPage>
@@ -136,7 +144,7 @@
 							<p>
 								<Anchor href="/edit-barcode/{barcode.id}">&plusmn; edit</Anchor>
 							</p>
-							<p>&#x05D3; {formatDateIso(barcode.createdAt, true)}</p>
+							<p>&star; {formatDateIso(barcode.createdAt, true)}</p>
 						</div>
 						<div>
 							<Button
@@ -147,6 +155,12 @@
 							</Button>
 						</div>
 					</div>
+				</div>
+
+				<div class="flex justify-center bg-gray-200 p-2">
+					<Button variant="secondary" on:click={() => handleDelete(barcode.id)}
+						>&times; delete</Button
+					>
 				</div>
 			</div>
 		{:else if barcodeError && hasBarcodeLoaded}
