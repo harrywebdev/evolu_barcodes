@@ -16,7 +16,7 @@
 	<div slot="content" class="grid grid-cols-2 gap-4">
 		{#each allBarcodes.rows as barcode (barcode.id)}
 			<button
-				class="cursor-pointer rounded-md border border-gray-300 shadow aspect-square"
+				class="aspect-square cursor-pointer rounded-md border border-gray-300 shadow"
 				on:click={() => goto(`/view-barcode/${barcode.id}`)}
 			>
 				<span
@@ -24,13 +24,11 @@
 					style="background-color: {barcode.bgColor}; color: {barcode.textColor}"
 				>
 					{#if barcode.logoUrl}
-						<span class="flex flex-row items-center justify-center">
-							<img
-								src={barcode.logoUrl}
-								alt="barcode logo"
-								class="block h-auto w-full max-w-full rounded-md"
-							/>
-						</span>
+						<img
+							src={barcode.logoUrl}
+							alt="barcode logo"
+							class="block h-auto w-full max-w-full rounded-md"
+						/>
 					{:else}
 						<span class="text-2xl font-bold">{barcode.title}</span>
 					{/if}

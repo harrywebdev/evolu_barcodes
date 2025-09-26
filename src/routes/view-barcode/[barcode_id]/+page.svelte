@@ -41,7 +41,6 @@
 		}
 
 		if (barcode) {
-			console.log(`barcode.format`, barcode.format);
 			if (barcode.format === 'qr_code') {
 				try {
 					const svgElement = encodeQR(barcode.code, 'svg');
@@ -158,8 +157,8 @@
 						<img id="barcode" class="block h-auto w-full" alt="" />
 					{/if}
 
-					<div class="mt-4 flex flex-row justify-between text-center text-gray-400 relative">
-						<div class="absolute left-0 top-1/2 -translate-y-1/2">
+					<div class="relative mt-4 flex w-full flex-row justify-between text-center text-gray-400">
+						<div class="absolute top-1/2 left-0 -translate-y-1/2">
 							<Button
 								variant="secondary"
 								on:click={() => handleCycleFormat(barcode, currentBarcodeFormatIndex, 'previous')}
@@ -168,15 +167,21 @@
 							</Button>
 						</div>
 
-						<div class="max-w-full">
-							<div class="max-w-full whitespace-break-spaces px-12 break-words">{barcode.code} | {barcode.format}</div>
-							<div>
-								<Anchor href="/edit-barcode/{barcode.id}">&plusmn; edit</Anchor>
+						<div class="max-w-full px-14">
+							<div class="max-w-full text-left text-sm break-words whitespace-break-spaces">
+								code: <code>{barcode.code}</code>
 							</div>
-							<div>&star; {formatDateIso(barcode.createdAt, true)}</div>
+
+							<div class="max-w-full text-left text-sm break-words whitespace-break-spaces">
+								format: <code>{barcode.format}</code>
+							</div>
+
+							<div class="max-w-full text-left text-xs break-words whitespace-break-spaces">
+								&star; {formatDateIso(barcode.createdAt, true)}
+							</div>
 						</div>
 
-						<div class="absolute right-0 top-1/2 -translate-y-1/2">
+						<div class="absolute top-1/2 right-0 -translate-y-1/2">
 							<Button
 								variant="secondary"
 								on:click={() => handleCycleFormat(barcode, currentBarcodeFormatIndex, 'next')}
@@ -187,11 +192,14 @@
 					</div>
 				</div>
 
-				<div class="flex justify-center bg-gray-200 p-2">
-					<Button variant="secondary" on:click={() => handleDelete(barcode.id)}
-					>&times; delete
-					</Button
+				<div class="align-center flex justify-center gap-4 bg-gray-200 p-2">
+					<Button variant="secondary" on:click={() => goto(`/edit-barcode/${barcode.id}`)}
+						>&plusmn; edit</Button
 					>
+
+					<Button variant="secondary" on:click={() => handleDelete(barcode.id)}>
+						&times; delete
+					</Button>
 				</div>
 			</div>
 		{:else if barcodeError && hasBarcodeLoaded}
