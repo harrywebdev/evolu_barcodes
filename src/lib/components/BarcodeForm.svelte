@@ -27,8 +27,6 @@
 		const file = (event.target as HTMLInputElement).files?.[0];
 		if (file) {
 			const image = await createImageBitmap(file);
-			console.log(image);
-			console.log(file);
 
 			const barcodeDetector = new BarcodeDetector({
 				formats: ['code_39', 'codabar', 'ean_13']
@@ -124,7 +122,6 @@
 			label="bgColor"
 			bind:value={bgColor}
 			placeholder="barcode background hex color."
-			required
 		/>
 
 		<Input
@@ -132,7 +129,6 @@
 			label="textColor"
 			bind:value={textColor}
 			placeholder="barcode text hex color."
-			required
 		/>
 	</div>
 

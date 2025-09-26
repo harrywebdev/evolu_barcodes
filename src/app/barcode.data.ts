@@ -5,7 +5,8 @@ import type {
 	BarcodeFormat,
 	BarcodeBgColor,
 	BarcodeTextColor,
-	BarcodeLogoUrl
+	BarcodeLogoUrl,
+	CreateBarcodeSchema
 } from './barcode.model';
 import { evolu } from './evolu';
 import type { kysely } from '@evolu/common';
@@ -58,22 +59,7 @@ export const queryBarcodeById = (barcodeId: BarcodeId) =>
 			.limit(1)
 	);
 
-export const createBarcode = (
-	title: BarcodeTitle,
-	code: BarcodeCode,
-	format: BarcodeFormat,
-	bgColor: BarcodeBgColor,
-	textColor: BarcodeTextColor,
-	logoUrl: BarcodeLogoUrl
-) =>
-	insert('barcode', {
-		title,
-		code,
-		format,
-		bgColor,
-		textColor,
-		logoUrl
-	});
+export const createBarcode = (barcode: CreateBarcodeSchema) => insert('barcode', barcode);
 
 export const updateBarcode = (
 	id: BarcodeId,

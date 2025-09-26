@@ -16,9 +16,9 @@
 			title,
 			code,
 			format,
-			bgColor,
-			textColor,
-			logoUrl
+			bgColor: bgColor || null,
+			textColor: textColor || null,
+			logoUrl: logoUrl || null
 		});
 
 		if (!validBarcode.ok) {
@@ -27,14 +27,7 @@
 			return;
 		}
 
-		const barcode = createBarcode(
-			validBarcode.value.title,
-			validBarcode.value.code,
-			validBarcode.value.format,
-			validBarcode.value.bgColor,
-			validBarcode.value.textColor,
-			validBarcode.value.logoUrl
-		);
+		const barcode = createBarcode(validBarcode.value);
 
 		if (!barcode.ok) {
 			console.error(barcode.error);

@@ -38,10 +38,12 @@ export type BarcodeFormat = typeof BarcodeFormat.Type;
 export const BarcodeTitle = NonEmptyTrimmedString100;
 export type BarcodeTitle = typeof BarcodeTitle.Type;
 
-export const BarcodeBgColor = regex('BarcodeBgColor', /^#[0-9A-Fa-f]{6}$/)(TrimmedString);
+export const BarcodeBgColor = nullOr(regex('BarcodeBgColor', /^#[0-9A-Fa-f]{6}$/)(TrimmedString));
 export type BarcodeBgColor = typeof BarcodeBgColor.Type;
 
-export const BarcodeTextColor = regex('BarcodeTextColor', /^#[0-9A-Fa-f]{6}$/)(TrimmedString);
+export const BarcodeTextColor = nullOr(
+	regex('BarcodeTextColor', /^#[0-9A-Fa-f]{6}$/)(TrimmedString)
+);
 export type BarcodeTextColor = typeof BarcodeTextColor.Type;
 
 export const BarcodeLogoUrl = nullOr(NonEmptyTrimmedString1000);
@@ -51,10 +53,11 @@ export const CreateBarcodeSchema = object({
 	title: BarcodeTitle,
 	code: BarcodeCode,
 	format: BarcodeFormat,
-	bgColor: BarcodeBgColor,
-	textColor: BarcodeTextColor,
-	logoUrl: BarcodeLogoUrl
+	bgColor: nullOr(BarcodeBgColor),
+	textColor: nullOr(BarcodeTextColor),
+	logoUrl: nullOr(BarcodeLogoUrl)
 });
+export type CreateBarcodeSchema = typeof CreateBarcodeSchema.Type;
 
 export const BarcodeSchema = {
 	id: BarcodeId,
