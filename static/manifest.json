@@ -1,0 +1,71 @@
+{
+  "name": "Bodiky - Barcode Manager",
+  "short_name": "Bodiky",
+  "description": "A simple and elegant barcode management application",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fbf9fa",
+  "theme_color": "#fbf9fa",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "en",
+  "categories": ["productivity", "utilities"],
+  "icons": [
+    {
+      "src": "/icons/72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/100.png",
+      "sizes": "100x100",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Add Barcode",
+      "short_name": "Add",
+      "description": "Add a new barcode",
+      "url": "/add-barcode",
+      "icons": [
+        {
+          "src": "/icons/100.png",
+          "sizes": "100x100"
+        }
+      ]
+    }
+  ]
+}
