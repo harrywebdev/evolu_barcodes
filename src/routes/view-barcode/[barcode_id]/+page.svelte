@@ -11,6 +11,7 @@
 	import JsBarcode from 'jsbarcode';
 	import Button from '$lib/components/Button.svelte';
 	import { formatDateIso } from '../../../app/utils';
+	import encodeQR from 'qr';
 
 	const barcodeIdParam = BarcodeId.fromUnknown(page.params.barcode_id);
 
@@ -31,6 +32,7 @@
 	);
 
 	let barcodeGenError = $state('');
+	let isShowingQr = $derived(barcode?.format === 'qr_code');
 
 	$effect(() => {
 		if (barcodeError && hasBarcodeLoaded) {
@@ -39,13 +41,28 @@
 		}
 
 		if (barcode) {
+			console.log(`barcode.format`, barcode.format);
+			if (barcode.format === 'qr_code') {
+				try {
+					const svgElement = encodeQR(barcode.code, 'svg');
+					const qrcodeContainer = document.getElementById('qrcode');
+					if (qrcodeContainer) {
+						qrcodeContainer.innerHTML = svgElement;
+					}
+				} catch (error) {
+					console.error(`QR code error`, error);
+					barcodeGenError = (error as Error).message || 'Error generating QR code';
+				}
+				return;
+			}
+
 			try {
 				JsBarcode('#barcode', barcode.code, {
 					format: BarcodeFormatMap[barcode.format]
 				});
 				barcodeGenError = '';
 			} catch (error) {
-				console.error(`error`, error);
+				console.error(`JS barcode error`, error);
 				if (typeof error === 'string') {
 					barcodeGenError = error;
 				}
@@ -76,6 +93,11 @@
 				const newFormat = BarcodeFormat.members[newIndex].expected;
 
 				// now try to generate the barcode with the new format and if it succeeds, update the format
+				if (newFormat === 'qr_code') {
+					updateBarcodeFormat(barcodeId, newFormat);
+					return;
+				}
+
 				try {
 					const testImageElement = document.createElement('img');
 
@@ -129,7 +151,12 @@
 					{#if barcodeGenError}
 						<ErrorMessage errorMessage={barcodeGenError} />
 					{/if}
-					<img id="barcode" class="block h-auto w-full" alt="" />
+
+					{#if isShowingQr}
+						<div id="qrcode" class="block h-auto w-full"></div>
+					{:else}
+						<img id="barcode" class="block h-auto w-full" alt="" />
+					{/if}
 
 					<div class="mt-4 flex flex-row justify-between text-center text-gray-400 relative">
 						<div class="absolute left-0 top-1/2 -translate-y-1/2">
