@@ -92,7 +92,6 @@
 					bind:files
 					bind:this={fileInput}
 					accept="image/*"
-					capture="environment"
 				/>
 			{:else}
 				<p class="block h-10 leading-10 text-gray-500">
