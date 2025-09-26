@@ -14,7 +14,18 @@ export const queryBarcodes = evolu.createQuery(
 	(db) =>
 		db
 			.selectFrom('barcode')
-			.select(['id', 'title', 'code', 'format', 'bgColor', 'textColor', 'logoUrl', 'createdAt'])
+			.select([
+				'id',
+				'title',
+				'code',
+				'format',
+				'bgColor',
+				'textColor',
+				'logoUrl',
+				'createdAt',
+				'updatedAt',
+				'isDeleted'
+			])
 			.where('isDeleted', 'is not', 1)
 			// Filter null value and ensure non-null type.
 			.where('title', 'is not', null)
@@ -30,7 +41,18 @@ export const queryBarcodeById = (barcodeId: BarcodeId) =>
 	evolu.createQuery((db) =>
 		db
 			.selectFrom('barcode')
-			.select(['id', 'title', 'code', 'format', 'bgColor', 'textColor', 'logoUrl', 'createdAt'])
+			.select([
+				'id',
+				'title',
+				'code',
+				'format',
+				'bgColor',
+				'textColor',
+				'logoUrl',
+				'createdAt',
+				'updatedAt',
+				'isDeleted'
+			])
 			.where('id', '=', barcodeId)
 			.where('isDeleted', 'is not', 1)
 			.limit(1)
@@ -64,5 +86,8 @@ export const updateBarcode = (
 ) => update('barcode', { id, title, code, format, bgColor, textColor, logoUrl });
 
 export const deleteBarcode = (id: BarcodeId) => update('barcode', { id, isDeleted: true });
+
+export const updateBarcodeFormat = (id: BarcodeId, format: BarcodeFormat) =>
+	update('barcode', { id, format });
 
 const { insert, update } = evolu;

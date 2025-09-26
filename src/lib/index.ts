@@ -7,3 +7,4 @@ export { default as TopNav } from './components/TopNav.svelte';
 export { default as LoadingIndicator } from './components/LoadingIndicator.svelte';
 export { default as BarcodeForm } from './components/BarcodeForm.svelte';
 export { default as LayoutPage } from './components/LayoutPage.svelte';
+export { default as ErrorMessage } from './components/ErrorMessage.svelte';

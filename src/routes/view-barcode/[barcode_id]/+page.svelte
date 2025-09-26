@@ -1,14 +1,16 @@
 <script lang="ts">
-	import { Anchor, TopNav, LayoutPage } from '$lib';
+	import { Anchor, TopNav, LayoutPage, ErrorMessage } from '$lib';
 	import { queryState } from '@evolu/svelte';
 	import { page } from '$app/state';
 	import { evolu } from '../../../app/evolu';
-	import { queryBarcodeById } from '../../../app/barcode.data';
-	import { BarcodeId } from '../../../app/barcode.model';
+	import { queryBarcodeById, updateBarcodeFormat } from '../../../app/barcode.data';
+	import { BarcodeFormatMap, BarcodeId, BarcodeFormat, Barcode } from '../../../app/barcode.model';
 	import { goto } from '$app/navigation';
 	import { getOrThrow } from '@evolu/common';
 	import { LoadingIndicator } from '$lib';
 	import JsBarcode from 'jsbarcode';
+	import Button from '$lib/components/Button.svelte';
+	import { formatDateIso } from '../../../app/utils';
 
 	const barcodeIdParam = BarcodeId.fromUnknown(page.params.barcode_id);
 
@@ -20,16 +22,77 @@
 	const barcodeId = getOrThrow(barcodeIdParam);
 
 	const barcodeState = queryState(evolu, () => queryBarcodeById(barcodeId));
-	const barcode = $derived(barcodeState.rows?.[0]);
+	const hasBarcodeLoaded = $derived(barcodeState.rows?.[0] !== undefined);
+	const barcodeRow = $derived(Barcode.fromUnknown(barcodeState.rows?.[0]));
+	const barcode = $derived(barcodeRow.ok ? barcodeRow.value : null);
+	const barcodeError = $derived(barcodeRow.ok ? null : barcodeRow.error);
+	const currentBarcodeFormatIndex = $derived(
+		BarcodeFormat.members.findIndex((member) => member.expected === barcode?.format)
+	);
+
+	let barcodeGenError = $state('');
 
 	$effect(() => {
-		if (barcode?.code) {
-			JsBarcode('#barcode', barcode.code, {
-				// TODO: map the existing `BarcodeFormat` to `JsBarcode` format
-				format: barcode.format && barcode.format !== 'unknown' ? barcode.format : 'code128' // default
-			});
+		if (barcodeError && hasBarcodeLoaded) {
+			console.log(`barcodeError`, barcodeError);
+			return;
+		}
+
+		if (barcode) {
+			try {
+				JsBarcode('#barcode', barcode.code, {
+					format: BarcodeFormatMap[barcode.format]
+				});
+				barcodeGenError = '';
+			} catch (error) {
+				console.error(`error`, error);
+				if (typeof error === 'string') {
+					barcodeGenError = error;
+				}
+			}
 		}
 	});
+
+	function handleCycleFormat(
+		barcode: Barcode,
+		currentIndex: number,
+		direction: 'previous' | 'next',
+		attempts: number = 1
+	) {
+		if (barcode.format) {
+			let newIndex;
+			switch (direction) {
+				case 'previous': {
+					newIndex = currentIndex > 0 ? currentIndex - 1 : BarcodeFormat.members.length - 1;
+					break;
+				}
+				case 'next': {
+					newIndex = currentIndex < BarcodeFormat.members.length - 1 ? currentIndex + 1 : 0;
+					break;
+				}
+			}
+
+			if (newIndex !== undefined) {
+				const newFormat = BarcodeFormat.members[newIndex].expected;
+
+				// now try to generate the barcode with the new format and if it succeeds, update the format
+				try {
+					const testImageElement = document.createElement('img');
+
+					JsBarcode(testImageElement, barcode.code, {
+						format: BarcodeFormatMap[newFormat]
+					});
+
+					updateBarcodeFormat(barcodeId, newFormat);
+				} catch (error) {
+					// try the next format, unless we've tried all formats
+					if (attempts < BarcodeFormat.members.length) {
+						handleCycleFormat(barcode, newIndex, direction, attempts + 1);
+					}
+				}
+			}
+		}
+	}
 </script>
 
 <LayoutPage>
@@ -54,16 +117,40 @@
 				</div>
 
 				<div class="p-4">
+					{#if barcodeGenError}
+						<ErrorMessage errorMessage={barcodeGenError} />
+					{/if}
 					<img id="barcode" class="block h-auto w-full" alt="" />
 
-					<div class="mt-4 text-center text-gray-400">
-						<p>{barcode.code} | {barcode.format}</p>
-						<p>
-							<Anchor href="/edit-barcode/{barcode.id}">&plusmn; edit</Anchor>
-						</p>
+					<div class="mt-4 flex flex-row justify-between text-center text-gray-400">
+						<div>
+							<Button
+								variant="secondary"
+								on:click={() => handleCycleFormat(barcode, currentBarcodeFormatIndex, 'previous')}
+							>
+								&lt;
+							</Button>
+						</div>
+						<div>
+							<p>{barcode.code} | {barcode.format}</p>
+							<p>
+								<Anchor href="/edit-barcode/{barcode.id}">&plusmn; edit</Anchor>
+							</p>
+							<p>&#x05D3; {formatDateIso(barcode.createdAt, true)}</p>
+						</div>
+						<div>
+							<Button
+								variant="secondary"
+								on:click={() => handleCycleFormat(barcode, currentBarcodeFormatIndex, 'next')}
+							>
+								&gt;
+							</Button>
+						</div>
 					</div>
 				</div>
 			</div>
+		{:else if barcodeError && hasBarcodeLoaded}
+			<ErrorMessage errorMessage={JSON.stringify(barcodeError)} />
 		{:else}
 			<LoadingIndicator />
 		{/if}

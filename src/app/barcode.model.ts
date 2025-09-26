@@ -3,12 +3,12 @@ import {
 	NonEmptyTrimmedString100,
 	id,
 	object,
-	DateIso,
 	Boolean,
 	union,
 	regex,
 	TrimmedString,
-	nullOr
+	nullOr,
+	DateIsoString
 } from '@evolu/common';
 
 export const BarcodeId = id('BarcodeId');
@@ -70,8 +70,25 @@ export const UpdateBarcodeSchema = object(BarcodeSchema);
 
 export const Barcode = object({
 	...BarcodeSchema,
-	createdAt: DateIso,
-	updatedAt: DateIso,
-	isDeleted: Boolean
+	createdAt: DateIsoString,
+	updatedAt: DateIsoString,
+	isDeleted: nullOr(Boolean)
 });
 export type Barcode = typeof Barcode.Type;
+
+export const BarcodeFormatMap: Record<BarcodeFormat, string> = {
+	aztec: 'aztec',
+	code_128: 'code128',
+	code_39: 'code39',
+	code_93: 'code93',
+	codabar: 'codabar',
+	data_matrix: 'datamatrix',
+	ean_13: 'ean13',
+	ean_8: 'ean8',
+	itf: 'itf',
+	pdf_417: 'pdf417',
+	qr_code: 'qrcode',
+	upc_a: 'upca',
+	upc_e: 'upce',
+	unknown: 'code128'
+};
