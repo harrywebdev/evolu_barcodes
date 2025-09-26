@@ -16,7 +16,7 @@
 	<div slot="content" class="grid grid-cols-2 gap-4">
 		{#each allBarcodes.rows as barcode (barcode.id)}
 			<button
-				class="cursor-pointer rounded-md border border-gray-300 shadow"
+				class="cursor-pointer rounded-md border border-gray-300 shadow aspect-square"
 				on:click={() => goto(`/view-barcode/${barcode.id}`)}
 			>
 				<span

@@ -84,6 +84,7 @@
 					});
 
 					updateBarcodeFormat(barcodeId, newFormat);
+					// eslint-disable-next-line @typescript-eslint/no-unused-vars
 				} catch (error) {
 					// try the next format, unless we've tried all formats
 					if (attempts < BarcodeFormat.members.length) {
@@ -130,8 +131,8 @@
 					{/if}
 					<img id="barcode" class="block h-auto w-full" alt="" />
 
-					<div class="mt-4 flex flex-row justify-between text-center text-gray-400">
-						<div>
+					<div class="mt-4 flex flex-row justify-between text-center text-gray-400 relative">
+						<div class="absolute left-0 top-1/2 -translate-y-1/2">
 							<Button
 								variant="secondary"
 								on:click={() => handleCycleFormat(barcode, currentBarcodeFormatIndex, 'previous')}
@@ -139,14 +140,16 @@
 								&lt;
 							</Button>
 						</div>
-						<div>
-							<p>{barcode.code} | {barcode.format}</p>
-							<p>
+
+						<div class="max-w-full">
+							<div class="max-w-full whitespace-break-spaces px-12 break-words">{barcode.code} | {barcode.format}</div>
+							<div>
 								<Anchor href="/edit-barcode/{barcode.id}">&plusmn; edit</Anchor>
-							</p>
-							<p>&star; {formatDateIso(barcode.createdAt, true)}</p>
+							</div>
+							<div>&star; {formatDateIso(barcode.createdAt, true)}</div>
 						</div>
-						<div>
+
+						<div class="absolute right-0 top-1/2 -translate-y-1/2">
 							<Button
 								variant="secondary"
 								on:click={() => handleCycleFormat(barcode, currentBarcodeFormatIndex, 'next')}
@@ -159,7 +162,8 @@
 
 				<div class="flex justify-center bg-gray-200 p-2">
 					<Button variant="secondary" on:click={() => handleDelete(barcode.id)}
-						>&times; delete</Button
+					>&times; delete
+					</Button
 					>
 				</div>
 			</div>

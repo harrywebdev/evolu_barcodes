@@ -14,7 +14,7 @@ import {
 export const BarcodeId = id('BarcodeId');
 export type BarcodeId = typeof BarcodeId.Type;
 
-export const BarcodeCode = NonEmptyTrimmedString100;
+export const BarcodeCode = NonEmptyTrimmedString1000;
 export type BarcodeCode = typeof BarcodeCode.Type;
 
 export const BarcodeFormat = union(
